@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ThunderCats - Arcade Phoenix</title>
+  <title>ThunderCats - Promo Arcade</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@700;900&display=swap');
 
     * {
       box-sizing: border-box;
@@ -20,83 +20,127 @@
       background-color: #060209;
       color: #fff;
       font-family: 'Press Start 2P', monospace, sans-serif;
-      display: flex;
-      flex-direction: column;
+      width: 100vw;
       height: 100vh;
       overflow: hidden;
+      position: relative;
     }
 
-    /* 1. CALUGA PROMOCIONAL SUPERIOR (Fija arriba con WhatsApp) */
-    #promo-header {
-      height: 52px;
+    /* ============================================================
+       1. MARCO CALUGA ARCADE SUPERIOR (TESTIGO DE VERSIÓN: AMARILLO)
+       ============================================================ */
+    #promo-card-top {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 68px;
       background: #14051e;
-      border-bottom: 2px solid #d32228;
+      
+      /* Marco Pixel Art Años 80 (Testigo Amarillo Dorado) */
+      border: 4px solid #ffcc00;
+      outline: 2px solid #000;
+      box-shadow: inset 0 0 0 2px #ffdd44, 0 4px 15px rgba(0, 0, 0, 0.9);
+
+      padding: 6px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 12px;
       gap: 8px;
-      z-index: 30;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+      z-index: 9999; /* Por encima de todo */
+    }
+
+    /* Recuadro Pixel para Sándwich o Producto */
+    .promo-thumb {
+      width: 44px;
+      height: 44px;
+      background: #250933;
+      border: 3px solid #ffcc00;
+      box-shadow: inset 0 0 0 1px #000;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
       flex-shrink: 0;
     }
 
-    .promo-info {
+    .promo-details {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
+      flex: 1;
       overflow: hidden;
     }
 
-    .promo-title {
-      font-size: 8px;
+    .promo-tag {
+      font-size: 7px;
       color: #ffcc00;
       letter-spacing: 0.5px;
-      white-space: nowrap;
+      line-height: 1.2;
+      text-shadow: 1px 1px 0 #000;
     }
 
-    .promo-sub {
-      font-size: 6.5px;
-      color: #ffd8d8;
-      white-space: nowrap;
+    .promo-subtext {
+      font-family: 'Rubik', sans-serif;
+      font-size: 11px;
+      color: #ffffff;
+      font-weight: 700;
+      line-height: 1.2;
     }
 
+    /* Botón verde oficial de WhatsApp */
     .btn-wa {
       background: #25d366;
-      color: #fff;
+      color: #ffffff;
       text-decoration: none;
-      font-size: 8px;
-      font-weight: bold;
-      padding: 8px 10px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 10px 10px;
       border-radius: 6px;
       white-space: nowrap;
-      border: 1.5px solid #1aa84f;
-      box-shadow: 0 2px 0 #12632f;
+      border: 2px solid #1caa4f;
+      box-shadow: 0 3px 0 #12632f;
+      display: flex;
+      align-items: center;
+      gap: 4px;
       flex-shrink: 0;
     }
 
     .btn-wa:active {
       transform: translateY(2px);
-      box-shadow: none;
+      box-shadow: 0 1px 0 #12632f;
     }
 
-    /* 2. BARRA HUD ARCADE (Puntos, Nivel y Botón del Ojo en el centro) */
+    /* ============================================================
+       2. BARRA HUD ARCADE (Inicia justo debajo de la caluga)
+       ============================================================ */
     #arcade-hud {
-      height: 48px;
+      position: fixed;
+      top: 68px;
+      left: 0;
+      width: 100%;
+      height: 44px;
       background: #090212;
-      border-bottom: 2px solid #ffcc00;
+      border-bottom: 2px solid #331244;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 4px 12px;
-      z-index: 25;
-      flex-shrink: 0;
+      padding: 0 12px;
+      z-index: 9998;
     }
 
-    .hud-col {
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hud-box {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
 
     .hud-label {
@@ -109,16 +153,16 @@
       color: #ffcc00;
     }
 
-    /* Botón del Ojo incorporado arriba en el HUD */
+    /* Botón Bomba en el HUD derecho */
     #eye-btn-top {
-      height: 38px;
-      padding: 0 12px;
-      border-radius: 19px;
+      height: 32px;
+      padding: 0 10px;
+      border-radius: 16px;
       background: #1c0926;
       border: 2px solid #4a1c66;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       cursor: pointer;
       box-shadow: 0 3px 0 #0c0211;
       transition: all 0.2s;
@@ -137,7 +181,7 @@
     }
 
     .eye-icon {
-      font-size: 16px;
+      font-size: 14px;
       line-height: 1;
     }
 
@@ -151,12 +195,16 @@
       font-weight: bold;
     }
 
-    /* 3. PANTALLA DEL JUEGO */
+    /* ============================================================
+       3. PANTALLA DEL JUEGO (Ocupa todo el espacio de fondo)
+       ============================================================ */
     #game-container {
-      width: 100%;
-      flex: 1;
+      position: absolute;
+      top: 112px; /* 68px + 44px */
+      bottom: 0;
+      left: 0;
+      right: 0;
       background: #090212;
-      position: relative;
       overflow: hidden;
     }
 
@@ -170,37 +218,40 @@
 </head>
 <body>
 
-  <!-- Caluga Promocional Superior Fija con WhatsApp -->
-  <header id="promo-header">
-    <div class="promo-info">
-      <span class="promo-title">⚡ ¿CUÁL ES LA PROMO DE HOY?</span>
-      <span class="promo-sub">Pase VIP ThunderCats • Consulta por WhatsApp</span>
+  <!-- 1. CALUGA SUPERIOR CON MARCO PIXEL AMARILLO (TESTIGO DE VERSIÓN) -->
+  <header id="promo-card-top">
+    <div class="promo-thumb">
+      🍔
+    </div>
+    <div class="promo-details">
+      <div class="promo-tag">⚡ ¿CUÁL ES LA PROMO DE HOY?</div>
+      <div class="promo-subtext">Pase VIP ThunderCats</div>
     </div>
     <a href="https://wa.me/56991081769?text=Hola!%20Tengo%20el%20cartucho%20ThunderCats,%20%C2%BFcu%C3%A1l%20es%20la%20promoci%C3%B3n%20sorpresa%20de%20hoy?" class="btn-wa">
-      WHATSAPP
+      💬 WHATSAPP
     </a>
   </header>
 
-  <!-- Barra Arcade HUD Superior: Puntos, Botón Bomba y Nivel -->
+  <!-- 2. HUD ARCADE (Puntos y Nivel a la izquierda, Ojo a la derecha) -->
   <div id="arcade-hud">
-    <div class="hud-col">
-      <span class="hud-label">PUNTOS</span>
-      <span class="hud-val" id="hudScore">0000</span>
+    <div class="hud-left">
+      <div class="hud-box">
+        <span class="hud-label">PUNTOS</span>
+        <span class="hud-val" id="hudScore">0000</span>
+      </div>
+      <div class="hud-box">
+        <span class="hud-label">NIVEL</span>
+        <span class="hud-val" id="hudLevel">1</span>
+      </div>
     </div>
 
-    <!-- Botón del Ojo de Thundera en el centro superior -->
     <div id="eye-btn-top">
       <span class="eye-icon" id="eyeIcon">👁️</span>
       <span class="eye-txt" id="eyeTxt">0%</span>
     </div>
-
-    <div class="hud-col" style="text-align: right;">
-      <span class="hud-label">NIVEL</span>
-      <span class="hud-val" id="hudLevel">1</span>
-    </div>
   </div>
 
-  <!-- Pantalla del Juego a Pantalla Completa hasta el fondo -->
+  <!-- 3. Pantalla de Juego -->
   <div id="game-container">
     <canvas id="gameCanvas"></canvas>
   </div>
@@ -218,7 +269,7 @@
 
     function resizeCanvas() {
       canvas.width = container.clientWidth || window.innerWidth;
-      canvas.height = container.clientHeight || (window.innerHeight - 100);
+      canvas.height = container.clientHeight || (window.innerHeight - 112);
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -231,7 +282,6 @@
     let levelUpTimer = 0;
     let flashScreenTimer = 0;
 
-    // Sistema de carga del Ojo (Bomba)
     let eyeKills = 0;
     const KILLS_NEEDED = 7;
 
@@ -250,7 +300,6 @@
       hudLevel.textContent = level;
     }
 
-    // León-O
     const player = {
       x: 160,
       y: 0,
@@ -259,23 +308,22 @@
       targetX: 160,
 
       draw() {
-        ctx.fillStyle = '#ff5500'; // Melena
+        ctx.fillStyle = '#ff5500';
         ctx.fillRect(this.x + 4, this.y, 30, 14);
 
-        ctx.fillStyle = '#ffcc99'; // Rostro
+        ctx.fillStyle = '#ffcc99';
         ctx.fillRect(this.x + 8, this.y + 10, 22, 12);
 
-        ctx.fillStyle = '#0055d4'; // Traje azul
+        ctx.fillStyle = '#0055d4';
         ctx.fillRect(this.x + 6, this.y + 22, 26, 14);
 
-        ctx.fillStyle = '#d32228'; // Cinturón
+        ctx.fillStyle = '#d32228';
         ctx.fillRect(this.x + 15, this.y + 28, 8, 8);
 
-        ctx.fillStyle = '#ffcc99'; // Botas
+        ctx.fillStyle = '#ffcc99';
         ctx.fillRect(this.x + 8, this.y + 36, 8, 8);
         ctx.fillRect(this.x + 22, this.y + 36, 8, 8);
 
-        // Espada del Augurio en la mano
         ctx.fillStyle = '#cccccc';
         ctx.fillRect(this.x + 18, this.y - 10, 3, 12);
         ctx.fillStyle = '#ffcc00';
@@ -294,15 +342,14 @@
       }
     };
 
-    // 1 SOLO RAYO TIPO TRUENO / RELÁMPAGO (Cadencia más lenta)
     let lightningBeams = [];
-    const SHOOT_INTERVAL = 26; // Cadencia pausada
+    const SHOOT_INTERVAL = 26;
 
     function shootLightning() {
       lightningBeams.push({
         x: player.x + 18,
         y: player.y - 12,
-        speed: 7, // Velocidad pausada
+        speed: 7,
         length: 32,
         seed: Math.random() * 100
       });
@@ -311,7 +358,7 @@
     function drawLightningBolt(b) {
       ctx.save();
       ctx.lineWidth = 3.5;
-      ctx.strokeStyle = '#00ffff'; // Aura celeste de trueno
+      ctx.strokeStyle = '#00ffff';
       ctx.shadowColor = '#ffffff';
       ctx.shadowBlur = 8;
 
@@ -320,7 +367,6 @@
       let startY = b.y;
       ctx.moveTo(startX, startY);
 
-      // Forma en zigzag tipo trueno
       let segs = 4;
       let segH = b.length / segs;
       for (let s = 1; s <= segs; s++) {
@@ -329,14 +375,12 @@
       }
       ctx.stroke();
 
-      // Núcleo blanco del relámpago
       ctx.lineWidth = 1.8;
       ctx.strokeStyle = '#ffffff';
       ctx.stroke();
       ctx.restore();
     }
 
-    // Enemigos
     const MUTANT_TYPES = [
       { color: '#2f822d', hp: 1, w: 32, h: 22 },
       { color: '#b0651e', hp: 1, w: 34, h: 24 },
@@ -374,7 +418,6 @@
       }
     }
 
-    // Bomba Ojo de Thundera
     function triggerEyeBomb() {
       if (eyeKills < KILLS_NEEDED) return;
       eyeKills = 0;
@@ -438,7 +481,6 @@
         ctx.fillStyle = '#090212';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Estrellas
         ctx.fillStyle = '#fff';
         ctx.fillRect(45, 30, 2, 2);
         ctx.fillRect(210, 80, 2, 2);
@@ -450,7 +492,6 @@
       if (gameState === 'PLAY') {
         frames++;
 
-        // Cadencia más lenta de disparo
         if (frames % SHOOT_INTERVAL === 0) {
           shootLightning();
         }
@@ -467,7 +508,6 @@
         player.update();
         player.draw();
 
-        // Actualizar y dibujar rayos trueno
         for (let i = 0; i < lightningBeams.length; i++) {
           let b = lightningBeams[i];
           b.y -= b.speed;
@@ -479,7 +519,6 @@
           }
         }
 
-        // Actualizar y dibujar enemigos
         for (let i = 0; i < enemies.length; i++) {
           let en = enemies[i];
           en.y += en.speed;
@@ -504,7 +543,6 @@
             ctx.fillRect(en.x + en.w - 12, en.y + 10, 4, 4);
           }
 
-          // Impacto de rayo
           for (let j = 0; j < lightningBeams.length; j++) {
             let b = lightningBeams[j];
             if (
@@ -530,7 +568,6 @@
             }
           }
 
-          // Colisión con jugador o tocan fondo
           if (
             en &&
             en.x < player.x + player.w &&
