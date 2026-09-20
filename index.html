@@ -17,7 +17,7 @@
     }
 
     body {
-      background-color: #060209;
+      background-color: #000000;
       color: #fff;
       font-family: 'Press Start 2P', monospace, sans-serif;
       width: 100vw;
@@ -26,9 +26,7 @@
       position: relative;
     }
 
-    /* ============================================================
-       1. MARCO CALUGA ARCADE SUPERIOR (TESTIGO DE VERSIÓN: AMARILLO)
-       ============================================================ */
+    /* Caluga Superior (Testigo Verde Neón) */
     #promo-card-top {
       position: fixed;
       top: 0;
@@ -36,27 +34,22 @@
       width: 100%;
       height: 68px;
       background: #14051e;
-      
-      /* Marco Pixel Art Años 80 (Testigo Amarillo Dorado) */
-      border: 4px solid #ffcc00;
+      border: 4px solid #00ff66;
       outline: 2px solid #000;
-      box-shadow: inset 0 0 0 2px #ffdd44, 0 4px 15px rgba(0, 0, 0, 0.9);
-
+      box-shadow: inset 0 0 0 2px #66ffaa, 0 4px 15px rgba(0, 255, 102, 0.4);
       padding: 6px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      z-index: 9999; /* Por encima de todo */
+      z-index: 9999;
     }
 
-    /* Recuadro Pixel para Sándwich o Producto */
     .promo-thumb {
       width: 44px;
       height: 44px;
       background: #250933;
-      border: 3px solid #ffcc00;
-      box-shadow: inset 0 0 0 1px #000;
+      border: 2px solid #00ff66;
       border-radius: 4px;
       display: flex;
       align-items: center;
@@ -75,10 +68,9 @@
 
     .promo-tag {
       font-size: 7px;
-      color: #ffcc00;
+      color: #00ff66;
       letter-spacing: 0.5px;
       line-height: 1.2;
-      text-shadow: 1px 1px 0 #000;
     }
 
     .promo-subtext {
@@ -89,7 +81,6 @@
       line-height: 1.2;
     }
 
-    /* Botón verde oficial de WhatsApp */
     .btn-wa {
       background: #25d366;
       color: #ffffff;
@@ -113,9 +104,7 @@
       box-shadow: 0 1px 0 #12632f;
     }
 
-    /* ============================================================
-       2. BARRA HUD ARCADE (Inicia justo debajo de la caluga)
-       ============================================================ */
+    /* HUD Arcade */
     #arcade-hud {
       position: fixed;
       top: 68px;
@@ -127,14 +116,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 12px;
+      padding: 0 10px;
       z-index: 9998;
     }
 
-    .hud-left {
+    .hud-group {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
     }
 
     .hud-box {
@@ -144,25 +133,30 @@
     }
 
     .hud-label {
-      font-size: 6px;
+      font-size: 5.5px;
       color: #888;
     }
 
     .hud-val {
-      font-size: 9px;
+      font-size: 8px;
       color: #ffcc00;
     }
 
-    /* Botón Bomba en el HUD derecho */
+    .hud-lives {
+      font-size: 9px;
+      color: #ff3344;
+      letter-spacing: 1px;
+    }
+
     #eye-btn-top {
       height: 32px;
-      padding: 0 10px;
+      padding: 0 8px;
       border-radius: 16px;
       background: #1c0926;
       border: 2px solid #4a1c66;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       cursor: pointer;
       box-shadow: 0 3px 0 #0c0211;
       transition: all 0.2s;
@@ -180,31 +174,18 @@
       to { transform: scale(1.06); }
     }
 
-    .eye-icon {
-      font-size: 14px;
-      line-height: 1;
-    }
+    .eye-icon { font-size: 13px; line-height: 1; }
+    .eye-txt { font-size: 6.5px; color: #aaa; }
+    #eye-btn-top.ready .eye-txt { color: #ffcc00; font-weight: bold; }
 
-    .eye-txt {
-      font-size: 7px;
-      color: #aaa;
-    }
-
-    #eye-btn-top.ready .eye-txt {
-      color: #ffcc00;
-      font-weight: bold;
-    }
-
-    /* ============================================================
-       3. PANTALLA DEL JUEGO (Ocupa todo el espacio de fondo)
-       ============================================================ */
+    /* Contenedor Canvas */
     #game-container {
       position: absolute;
-      top: 112px; /* 68px + 44px */
+      top: 112px;
       bottom: 0;
       left: 0;
       right: 0;
-      background: #090212;
+      background: #000000;
       overflow: hidden;
     }
 
@@ -218,11 +199,9 @@
 </head>
 <body>
 
-  <!-- 1. CALUGA SUPERIOR CON MARCO PIXEL AMARILLO (TESTIGO DE VERSIÓN) -->
+  <!-- Caluga Promocional con Marco Verde Neón -->
   <header id="promo-card-top">
-    <div class="promo-thumb">
-      🍔
-    </div>
+    <div class="promo-thumb">🍔</div>
     <div class="promo-details">
       <div class="promo-tag">⚡ ¿CUÁL ES LA PROMO DE HOY?</div>
       <div class="promo-subtext">Pase VIP ThunderCats</div>
@@ -232,12 +211,16 @@
     </a>
   </header>
 
-  <!-- 2. HUD ARCADE (Puntos y Nivel a la izquierda, Ojo a la derecha) -->
+  <!-- HUD: Puntos, Vidas, Nivel y Botón Bomba -->
   <div id="arcade-hud">
-    <div class="hud-left">
+    <div class="hud-group">
       <div class="hud-box">
-        <span class="hud-label">PUNTOS</span>
+        <span class="hud-label">PTS</span>
         <span class="hud-val" id="hudScore">0000</span>
+      </div>
+      <div class="hud-box">
+        <span class="hud-label">VIDAS</span>
+        <span class="hud-lives" id="hudLives">❤❤</span>
       </div>
       <div class="hud-box">
         <span class="hud-label">NIVEL</span>
@@ -251,7 +234,7 @@
     </div>
   </div>
 
-  <!-- 3. Pantalla de Juego -->
+  <!-- Pantalla de Juego -->
   <div id="game-container">
     <canvas id="gameCanvas"></canvas>
   </div>
@@ -262,6 +245,7 @@
     const container = document.getElementById('game-container');
     
     const hudScore = document.getElementById('hudScore');
+    const hudLives = document.getElementById('hudLives');
     const hudLevel = document.getElementById('hudLevel');
     const eyeBtn = document.getElementById('eye-btn-top');
     const eyeIcon = document.getElementById('eyeIcon');
@@ -277,10 +261,14 @@
     let score = 0;
     let highScore = 0;
     let level = 1;
+    let lives = 2;
+    let nextLifeScore = 20000;
     let gameState = 'START';
     let frames = 0;
     let levelUpTimer = 0;
+    let extraLifeTimer = 0;
     let flashScreenTimer = 0;
+    let invulnerableTimer = 0;
 
     let eyeKills = 0;
     const KILLS_NEEDED = 7;
@@ -298,6 +286,7 @@
       }
       hudScore.textContent = score.toString().padStart(4, '0');
       hudLevel.textContent = level;
+      hudLives.textContent = "❤".repeat(Math.max(0, lives));
     }
 
     const player = {
@@ -308,6 +297,8 @@
       targetX: 160,
 
       draw() {
+        if (invulnerableTimer > 0 && Math.floor(invulnerableTimer / 4) % 2 === 0) return;
+
         ctx.fillStyle = '#ff5500';
         ctx.fillRect(this.x + 4, this.y, 30, 14);
 
@@ -431,6 +422,20 @@
       enemies = [];
     }
 
+    function loseLife() {
+      if (invulnerableTimer > 0) return;
+      lives--;
+      updateEyeUI();
+
+      if (lives <= 0) {
+        gameState = 'GAMEOVER';
+        if (score > highScore) highScore = score;
+      } else {
+        invulnerableTimer = 80;
+        flashScreenTimer = 8;
+      }
+    }
+
     function setTargetFromTouch(e) {
       const rect = canvas.getBoundingClientRect();
       const touch = e.touches[0];
@@ -445,6 +450,8 @@
         gameState = 'PLAY';
         score = 0;
         level = 1;
+        lives = 2;
+        nextLifeScore = 20000;
         eyeKills = 0;
         lightningBeams = [];
         enemies = [];
@@ -478,7 +485,7 @@
         ctx.fillStyle = (flashScreenTimer % 2 === 0) ? '#ffcc00' : '#e52521';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       } else {
-        ctx.fillStyle = '#090212';
+        ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = '#fff';
@@ -491,6 +498,7 @@
 
       if (gameState === 'PLAY') {
         frames++;
+        if (invulnerableTimer > 0) invulnerableTimer--;
 
         if (frames % SHOOT_INTERVAL === 0) {
           shootLightning();
@@ -503,6 +511,13 @@
         if (currentLevel > level) {
           level = currentLevel;
           levelUpTimer = 90;
+        }
+
+        if (score >= nextLifeScore) {
+          lives++;
+          nextLifeScore += 20000;
+          extraLifeTimer = 90;
+          updateEyeUI();
         }
 
         player.update();
@@ -575,42 +590,46 @@
             en.y < player.y + player.h &&
             en.y + en.h > player.y
           ) {
-            gameState = 'GAMEOVER';
-            if (score > highScore) highScore = score;
-          }
-
-          if (en && en.y > canvas.height) {
-            gameState = 'GAMEOVER';
-            if (score > highScore) highScore = score;
+            enemies.splice(i, 1);
+            i--;
+            loseLife();
+          } else if (en && en.y > canvas.height) {
+            enemies.splice(i, 1);
+            i--;
+            loseLife();
           }
         }
 
         if (levelUpTimer > 0) {
           levelUpTimer--;
           ctx.fillStyle = '#ffcc00';
-          ctx.font = '12px "Press Start 2P"';
+          ctx.font = '11px "Press Start 2P"';
           ctx.textAlign = 'center';
           ctx.fillText("¡PASÓ DE NIVEL!", canvas.width / 2, canvas.height / 2 - 20);
-          ctx.fillStyle = '#fff';
-          ctx.font = '8px "Press Start 2P"';
-          ctx.fillText("VELOCIDAD AUMENTADA", canvas.width / 2, canvas.height / 2 + 8);
+          ctx.textAlign = 'left';
+        }
+
+        if (extraLifeTimer > 0) {
+          extraLifeTimer--;
+          ctx.fillStyle = '#00ff66';
+          ctx.font = '11px "Press Start 2P"';
+          ctx.textAlign = 'center';
+          ctx.fillText("¡+1 VIDA EXTRA!", canvas.width / 2, canvas.height / 2 + 10);
           ctx.textAlign = 'left';
         }
 
       } else if (gameState === 'START') {
-        player.reset();
-        player.draw();
-
         ctx.fillStyle = '#ffcc00';
-        ctx.font = '11px "Press Start 2P"';
+        ctx.font = '12px "Press Start 2P"';
         ctx.textAlign = 'center';
         ctx.fillText("THUNDERCATS", canvas.width / 2, canvas.height / 2 - 40);
-        ctx.fillStyle = '#fff';
-        ctx.font = '7.5px "Press Start 2P"';
-        ctx.fillText("ARRASTRA TU DEDO PARA MOVER", canvas.width / 2, canvas.height / 2 - 14);
-        ctx.fillText("DISPARO DE TRUENO CONTINUO", canvas.width / 2, canvas.height / 2 + 6);
-        ctx.fillStyle = '#00ffcc';
-        ctx.fillText("TOCA LA PANTALLA PARA JUGAR", canvas.width / 2, canvas.height / 2 + 30);
+
+        ctx.fillStyle = '#00ff66';
+        ctx.font = '8.5px "Press Start 2P"';
+        ctx.fillText("TOCA LA PANTALLA", canvas.width / 2, canvas.height / 2 + 10);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '7px "Press Start 2P"';
+        ctx.fillText("INICIAS CON 2 VIDAS", canvas.width / 2, canvas.height / 2 + 30);
         ctx.textAlign = 'left';
 
       } else if (gameState === 'GAMEOVER') {
