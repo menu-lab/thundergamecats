@@ -26,7 +26,6 @@
       overflow: hidden;
     }
 
-    /* Cabecera compacta */
     #header {
       height: 44px;
       background: #0f0516;
@@ -56,15 +55,11 @@
       text-shadow: 2px 2px 0 #d32228;
     }
 
-    /* Pantalla de juego */
     #canvas-container {
       width: 100%;
       flex: 1;
       background: #12041f;
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       overflow: hidden;
     }
 
@@ -75,18 +70,16 @@
       image-rendering: pixelated;
     }
 
-    /* Panel inferior */
     #bottom-panel {
-      height: 46vh;
+      height: 45vh;
       background: #0c0312;
       border-top: 3px solid #ffcc00;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 8px 14px 10px;
+      padding: 8px 14px 12px;
     }
 
-    /* Fila comercial: Promoción + Recuadro para Sándwich/Producto */
     .promo-row {
       background: #1a0824;
       border: 2px solid #d32228;
@@ -97,10 +90,9 @@
       gap: 10px;
     }
 
-    /* Recuadro reservado para tu imagen o gif */
     .product-slot {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       background: #2b0c3a;
       border: 1.5px dashed #ffcc00;
       border-radius: 8px;
@@ -109,14 +101,13 @@
       justify-content: center;
       font-size: 20px;
       flex-shrink: 0;
-      overflow: hidden;
     }
 
     .promo-content {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
 
     .promo-text {
@@ -149,7 +140,6 @@
       box-shadow: none;
     }
 
-    /* Mandos táctiles */
     .controls-row {
       display: flex;
       align-items: center;
@@ -184,84 +174,47 @@
       color: #110517;
     }
 
-    /* Botón del Ojo de Thundera con medidor de carga circular */
     .eye-btn-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      position: relative;
-    }
-
-    .eye-btn-container {
-      position: relative;
-      width: 82px;
-      height: 82px;
-    }
-
-    .charge-svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg);
-      pointer-events: none;
-    }
-
-    .charge-circle-bg {
-      fill: none;
-      stroke: #250933;
-      stroke-width: 6;
-    }
-
-    .charge-circle-bar {
-      fill: none;
-      stroke: #00ffcc;
-      stroke-width: 6;
-      stroke-dasharray: 232;
-      stroke-dashoffset: 232;
-      transition: stroke-dashoffset 0.1s linear, stroke 0.2s;
     }
 
     .btn-eye {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      width: 70px;
-      height: 70px;
+      width: 74px;
+      height: 74px;
       border-radius: 50%;
       background: #1c0827;
       border: 3px solid #551c72;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       box-shadow: 0 5px 0 #0d0213;
-      overflow: hidden;
+      transition: all 0.2s;
     }
 
     .btn-eye.ready {
       background: linear-gradient(180deg, #e52521 0%, #8e0b0d 100%);
       border-color: #ffcc00;
-      box-shadow: 0 5px 0 #520507, 0 0 16px rgba(255, 204, 0, 0.6);
-      animation: pulseEye 0.7s infinite alternate;
+      box-shadow: 0 5px 0 #520507, 0 0 14px rgba(255, 204, 0, 0.7);
     }
 
-    @keyframes pulseEye {
-      from { transform: scale(1); }
-      to { transform: scale(1.04); }
+    .btn-eye.ready:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #520507;
     }
 
-    .eye-icon {
-      width: 44px;
-      height: 44px;
+    .eye-symbol {
+      font-size: 22px;
+      line-height: 1;
     }
 
     .btn-label {
       font-size: 7px;
-      color: #999;
-      letter-spacing: 0.5px;
+      color: #888;
     }
 
     .btn-label.ready {
@@ -281,3 +234,347 @@
   </div>
 
   <div id="bottom-panel">
+    
+    <div class="promo-row">
+      <div class="product-slot">🍔</div>
+      <div class="promo-content">
+        <div class="promo-text">
+          <strong>PROMO THUNDERCATS ⚡</strong>
+          Consulta tu beneficio o combo especial del día.
+        </div>
+        <a href="https://wa.me/56991081769?text=Hola!%20Tengo%20el%20cartucho%20ThunderCats%20y%20quiero%20conocer%20la%20promocion%20de%20hoy" class="btn-wa">
+          WHATSAPP
+        </a>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div class="arrows-group">
+        <button class="btn-arrow" id="btnLeft">◀</button>
+        <button class="btn-arrow" id="btnRight">▶</button>
+      </div>
+
+      <div class="eye-btn-wrapper">
+        <button class="btn-eye" id="btnEye">
+          <div class="eye-symbol" id="eyeSymbol">👁️</div>
+        </button>
+        <span class="btn-label" id="eyeLabel">CARGANDO</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.getElementById('canvas-container');
+
+    function resizeCanvas() {
+      canvas.width = container.clientWidth || 360;
+      canvas.height = container.clientHeight || 280;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let score = 0;
+    let highScore = 0;
+    let level = 1;
+    let gameState = 'START';
+    let frames = 0;
+    let levelUpTimer = 0;
+
+    let eyeCharge = 100;
+    const chargeMax = 100;
+    const chargeSpeed = 0.6;
+    const btnEye = document.getElementById('btnEye');
+    const eyeSymbol = document.getElementById('eyeSymbol');
+    const eyeLabel = document.getElementById('eyeLabel');
+
+    function updateEyeStatus() {
+      if (eyeCharge < chargeMax) {
+        eyeCharge = Math.min(chargeMax, eyeCharge + chargeSpeed);
+      }
+
+      if (eyeCharge >= chargeMax) {
+        btnEye.classList.add('ready');
+        eyeLabel.classList.add('ready');
+        eyeLabel.textContent = "LISTO";
+        eyeSymbol.textContent = "🔥";
+      } else {
+        btnEye.classList.remove('ready');
+        eyeLabel.classList.remove('ready');
+        eyeLabel.textContent = Math.floor((eyeCharge / chargeMax) * 100) + "%";
+        eyeSymbol.textContent = "👁️";
+      }
+    }
+
+    const player = {
+      x: 160,
+      y: 200,
+      w: 36,
+      h: 42,
+      speed: 4.8,
+      movingLeft: false,
+      movingRight: false,
+
+      draw() {
+        ctx.fillStyle = '#ff5500';
+        ctx.fillRect(this.x + 4, this.y, 28, 14);
+
+        ctx.fillStyle = '#ffcc99';
+        ctx.fillRect(this.x + 8, this.y + 10, 20, 12);
+
+        ctx.fillStyle = '#0055d4';
+        ctx.fillRect(this.x + 6, this.y + 22, 24, 14);
+
+        ctx.fillStyle = '#d32228';
+        ctx.fillRect(this.x + 14, this.y + 28, 8, 8);
+
+        ctx.fillStyle = '#ffcc99';
+        ctx.fillRect(this.x + 8, this.y + 36, 8, 6);
+        ctx.fillRect(this.x + 20, this.y + 36, 8, 6);
+      },
+
+      update() {
+        if (this.movingLeft && this.x > 8) this.x -= this.speed;
+        if (this.movingRight && this.x + this.w < canvas.width - 8) this.x += this.speed;
+      },
+
+      reset() {
+        this.x = canvas.width / 2 - this.w / 2;
+        this.y = canvas.height - 50;
+      }
+    };
+
+    let beams = [];
+    function shootBeam() {
+      if (eyeCharge < chargeMax) return;
+      eyeCharge = 0;
+
+      beams.push({ x: player.x + 8,  y: player.y - 6, w: 6, h: 20, speed: 8 });
+      beams.push({ x: player.x + 22, y: player.y - 6, w: 6, h: 20, speed: 8 });
+    }
+
+    const MUTANT_TYPES = [
+      { color: '#2f822d', hp: 1, w: 30, h: 22 },
+      { color: '#a86520', hp: 1, w: 32, h: 24 },
+      { color: '#7b3ba8', hp: 1, w: 34, h: 24 },
+      { color: '#34495e', hp: 1, w: 32, h: 20 }
+    ];
+
+    let enemies = [];
+    function spawnEnemy() {
+      const isMummRa = (Math.random() < 0.12 && score > 600);
+
+      if (isMummRa) {
+        enemies.push({
+          type: 'MUMMRA',
+          hp: 4,
+          maxHp: 4,
+          x: Math.random() * (canvas.width - 48 - 20) + 10,
+          y: -44,
+          w: 48,
+          h: 38,
+          speed: 0.9 + (level * 0.15)
+        });
+      } else {
+        const t = MUTANT_TYPES[Math.floor(Math.random() * MUTANT_TYPES.length)];
+        enemies.push({
+          type: 'MUTANT',
+          color: t.color,
+          hp: t.hp,
+          maxHp: t.hp,
+          x: Math.random() * (canvas.width - t.w - 20) + 10,
+          y: -30,
+          w: t.w,
+          h: t.h,
+          speed: (0.7 + Math.random() * 0.5) + (level * 0.18)
+        });
+      }
+    }
+
+    const btnLeft = document.getElementById('btnLeft');
+    const btnRight = document.getElementById('btnRight');
+
+    btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); player.movingLeft = true; }, { passive: false });
+    btnLeft.addEventListener('touchend', (e) => { e.preventDefault(); player.movingLeft = false; }, { passive: false });
+
+    btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); player.movingRight = true; }, { passive: false });
+    btnRight.addEventListener('touchend', (e) => { e.preventDefault(); player.movingRight = false; }, { passive: false });
+
+    btnEye.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (gameState === 'START') {
+        gameState = 'PLAY';
+        score = 0;
+        level = 1;
+        beams = [];
+        enemies = [];
+        eyeCharge = 100;
+        player.reset();
+      } else if (gameState === 'PLAY') {
+        shootBeam();
+      } else if (gameState === 'GAMEOVER') {
+        gameState = 'START';
+      }
+    }, { passive: false });
+
+    function loop() {
+      updateEyeStatus();
+
+      ctx.fillStyle = '#0f041b';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(50, 40, 2, 2);
+      ctx.fillRect(220, 90, 2, 2);
+      ctx.fillRect(140, 160, 2, 2);
+      ctx.fillRect(290, 220, 2, 2);
+
+      if (gameState === 'PLAY') {
+        frames++;
+
+        const spawnRate = Math.max(40, 75 - (level * 6));
+        if (frames % spawnRate === 0) spawnEnemy();
+
+        const currentLevel = Math.floor(score / 3000) + 1;
+        if (currentLevel > level) {
+          level = currentLevel;
+          levelUpTimer = 90;
+        }
+
+        player.update();
+        player.draw();
+
+        for (let i = 0; i < beams.length; i++) {
+          let b = beams[i];
+          b.y -= b.speed;
+
+          ctx.fillStyle = '#ffcc00';
+          ctx.fillRect(b.x - 1, b.y, b.w + 2, b.h);
+          ctx.fillStyle = '#d32228';
+          ctx.fillRect(b.x, b.y + 2, b.w, b.h - 4);
+
+          if (b.y < -20) {
+            beams.splice(i, 1);
+            i--;
+          }
+        }
+
+        for (let i = 0; i < enemies.length; i++) {
+          let en = enemies[i];
+          en.y += en.speed;
+
+          if (en.type === 'MUMMRA') {
+            ctx.fillStyle = '#a81316';
+            ctx.fillRect(en.x, en.y, en.w, en.h);
+            ctx.fillStyle = '#4c6572';
+            ctx.fillRect(en.x + 8, en.y + 6, en.w - 16, 20);
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(en.x + 14, en.y + 12, 5, 5);
+            ctx.fillRect(en.x + 28, en.y + 12, 5, 5);
+            ctx.fillStyle = '#ffcc00';
+            ctx.fillRect(en.x, en.y - 6, (en.w * (en.hp / en.maxHp)), 4);
+          } else {
+            ctx.fillStyle = en.color;
+            ctx.fillRect(en.x, en.y + 6, en.w, en.h - 6);
+            ctx.fillStyle = '#111';
+            ctx.fillRect(en.x + 6, en.y, en.w - 12, 6);
+            ctx.fillStyle = '#ffcc00';
+            ctx.fillRect(en.x + 8, en.y + 10, 4, 4);
+            ctx.fillRect(en.x + en.w - 12, en.y + 10, 4, 4);
+          }
+
+          for (let j = 0; j < beams.length; j++) {
+            let b = beams[j];
+            if (
+              b.x < en.x + en.w &&
+              b.x + b.w > en.x &&
+              b.y < en.y + en.h &&
+              b.y + b.h > en.y
+            ) {
+              en.hp--;
+              beams.splice(j, 1);
+
+              if (en.hp <= 0) {
+                score += (en.type === 'MUMMRA' ? 500 : 100);
+                enemies.splice(i, 1);
+                i--;
+              }
+              break;
+            }
+          }
+
+          if (
+            en &&
+            en.x < player.x + player.w &&
+            en.x + en.w > player.x &&
+            en.y < player.y + player.h &&
+            en.y + en.h > player.y
+          ) {
+            gameState = 'GAMEOVER';
+            if (score > highScore) highScore = score;
+          }
+
+          if (en && en.y > canvas.height) {
+            gameState = 'GAMEOVER';
+            if (score > highScore) highScore = score;
+          }
+        }
+
+        ctx.fillStyle = '#ffcc00';
+        ctx.font = '10px "Press Start 2P"';
+        ctx.fillText("PTS " + score, 14, 24);
+        ctx.fillText("NIV " + level, canvas.width - 80, 24);
+
+        if (levelUpTimer > 0) {
+          levelUpTimer--;
+          ctx.fillStyle = '#ffcc00';
+          ctx.font = '11px "Press Start 2P"';
+          ctx.textAlign = 'center';
+          ctx.fillText("¡PASÓ DE NIVEL!", canvas.width / 2, canvas.height / 2 - 16);
+          ctx.textAlign = 'left';
+        }
+
+      } else if (gameState === 'START') {
+        player.reset();
+        player.draw();
+
+        ctx.fillStyle = '#ffcc00';
+        ctx.font = '11px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.fillText("THUNDERCATS", canvas.width / 2, canvas.height / 2 - 36);
+        ctx.fillStyle = '#fff';
+        ctx.font = '7.5px "Press Start 2P"';
+        ctx.fillText("ESQUIVA MUTANTES Y MUMM-RA", canvas.width / 2, canvas.height / 2 - 14);
+        ctx.fillStyle = '#00ffcc';
+        ctx.fillText("TOCA EL OJO PARA EMPEZAR", canvas.width / 2, canvas.height / 2 + 16);
+        ctx.textAlign = 'left';
+
+      } else if (gameState === 'GAMEOVER') {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(canvas.width / 2 - 120, canvas.height / 2 - 50, 240, 96);
+        ctx.strokeStyle = '#d32228';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(canvas.width / 2 - 120, canvas.height / 2 - 50, 240, 96);
+
+        ctx.fillStyle = '#d32228';
+        ctx.font = '12px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 20);
+
+        ctx.fillStyle = '#ffcc00';
+        ctx.font = '8px "Press Start 2P"';
+        ctx.fillText("PUNTOS: " + score, canvas.width / 2, canvas.height / 2 + 2);
+        ctx.fillText("RECORD: " + highScore, canvas.width / 2, canvas.height / 2 + 18);
+        ctx.textAlign = 'left';
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    player.reset();
+    loop();
+  </script>
+</body>
+</html>
