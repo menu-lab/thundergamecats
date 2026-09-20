@@ -26,24 +26,25 @@
       overflow: hidden;
     }
 
-    /* Caluga Promocional Superior Fija */
+    /* 1. CALUGA PROMOCIONAL SUPERIOR (Fija arriba con WhatsApp) */
     #promo-header {
-      height: 54px;
-      background: #150620;
-      border-bottom: 2px solid #ffcc00;
+      height: 52px;
+      background: #14051e;
+      border-bottom: 2px solid #d32228;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 6px 12px;
       gap: 8px;
-      z-index: 10;
+      z-index: 30;
       box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+      flex-shrink: 0;
     }
 
     .promo-info {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
       overflow: hidden;
     }
 
@@ -79,11 +80,82 @@
       box-shadow: none;
     }
 
-    /* Contenedor del Juego a Pantalla Completa */
+    /* 2. BARRA HUD ARCADE (Puntos, Nivel y Botón del Ojo en el centro) */
+    #arcade-hud {
+      height: 48px;
+      background: #090212;
+      border-bottom: 2px solid #ffcc00;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 12px;
+      z-index: 25;
+      flex-shrink: 0;
+    }
+
+    .hud-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .hud-label {
+      font-size: 6px;
+      color: #888;
+    }
+
+    .hud-val {
+      font-size: 9px;
+      color: #ffcc00;
+    }
+
+    /* Botón del Ojo incorporado arriba en el HUD */
+    #eye-btn-top {
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 19px;
+      background: #1c0926;
+      border: 2px solid #4a1c66;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #0c0211;
+      transition: all 0.2s;
+    }
+
+    #eye-btn-top.ready {
+      background: linear-gradient(180deg, #e52521 0%, #8e0b0d 100%);
+      border-color: #ffcc00;
+      box-shadow: 0 0 14px rgba(255, 204, 0, 0.8), 0 3px 0 #520507;
+      animation: pulseEye 0.6s infinite alternate;
+    }
+
+    @keyframes pulseEye {
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
+    }
+
+    .eye-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .eye-txt {
+      font-size: 7px;
+      color: #aaa;
+    }
+
+    #eye-btn-top.ready .eye-txt {
+      color: #ffcc00;
+      font-weight: bold;
+    }
+
+    /* 3. PANTALLA DEL JUEGO */
     #game-container {
       width: 100%;
       flex: 1;
-      background: #0a0312;
+      background: #090212;
       position: relative;
       overflow: hidden;
     }
@@ -94,94 +166,59 @@
       height: 100%;
       image-rendering: pixelated;
     }
-
-    /* Botón Flotante del Ojo de Thundera (Bomba) */
-    #eye-bomb-btn {
-      position: absolute;
-      bottom: 24px;
-      right: 20px;
-      width: 76px;
-      height: 76px;
-      border-radius: 50%;
-      background: rgba(20, 5, 28, 0.55);
-      border: 3px solid rgba(255, 204, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 20;
-      transition: all 0.25s ease;
-    }
-
-    #eye-bomb-btn.ready {
-      background: radial-gradient(circle, #e52521 20%, #8e0b0d 90%);
-      border: 3px solid #ffcc00;
-      box-shadow: 0 0 20px rgba(255, 204, 0, 0.8), inset 0 0 10px #ffcc00;
-      animation: pulseGlow 0.6s infinite alternate;
-      opacity: 1;
-    }
-
-    @keyframes pulseGlow {
-      from { transform: scale(1); }
-      to { transform: scale(1.08); }
-    }
-
-    .eye-icon {
-      font-size: 26px;
-      line-height: 1;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
-    }
-
-    .eye-status-text {
-      font-size: 6.5px;
-      color: #bbb;
-      margin-top: 4px;
-      letter-spacing: 0.5px;
-    }
-
-    #eye-bomb-btn.ready .eye-status-text {
-      color: #ffcc00;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
 
-  <!-- Caluga Promocional Arriba de Todo -->
+  <!-- Caluga Promocional Superior Fija con WhatsApp -->
   <header id="promo-header">
     <div class="promo-info">
-      <span class="promo-title">⚡ THUNDERCATS PASS</span>
-      <span class="promo-sub">Consulta tu promoción o sorpresa VIP</span>
+      <span class="promo-title">⚡ ¿CUÁL ES LA PROMO DE HOY?</span>
+      <span class="promo-sub">Pase VIP ThunderCats • Consulta por WhatsApp</span>
     </div>
-    <a href="https://wa.me/56991081769?text=Hola!%20Tengo%20el%20cartucho%20ThunderCats%20y%20quiero%20conocer%20la%20promocion%20de%20hoy" class="btn-wa">
+    <a href="https://wa.me/56991081769?text=Hola!%20Tengo%20el%20cartucho%20ThunderCats,%20%C2%BFcu%C3%A1l%20es%20la%20promoci%C3%B3n%20sorpresa%20de%20hoy?" class="btn-wa">
       WHATSAPP
     </a>
   </header>
 
-  <!-- Pantalla de Juego -->
+  <!-- Barra Arcade HUD Superior: Puntos, Botón Bomba y Nivel -->
+  <div id="arcade-hud">
+    <div class="hud-col">
+      <span class="hud-label">PUNTOS</span>
+      <span class="hud-val" id="hudScore">0000</span>
+    </div>
+
+    <!-- Botón del Ojo de Thundera en el centro superior -->
+    <div id="eye-btn-top">
+      <span class="eye-icon" id="eyeIcon">👁️</span>
+      <span class="eye-txt" id="eyeTxt">0%</span>
+    </div>
+
+    <div class="hud-col" style="text-align: right;">
+      <span class="hud-label">NIVEL</span>
+      <span class="hud-val" id="hudLevel">1</span>
+    </div>
+  </div>
+
+  <!-- Pantalla del Juego a Pantalla Completa hasta el fondo -->
   <div id="game-container">
     <canvas id="gameCanvas"></canvas>
-
-    <!-- Botón Flotante Semitransparente del Ojo -->
-    <div id="eye-bomb-btn">
-      <span class="eye-icon" id="eyeIcon">👁️</span>
-      <span class="eye-status-text" id="eyeText">0%</span>
-    </div>
   </div>
 
   <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const container = document.getElementById('game-container');
-    const eyeBtn = document.getElementById('eye-bomb-btn');
+    
+    const hudScore = document.getElementById('hudScore');
+    const hudLevel = document.getElementById('hudLevel');
+    const eyeBtn = document.getElementById('eye-btn-top');
     const eyeIcon = document.getElementById('eyeIcon');
-    const eyeText = document.getElementById('eyeText');
+    const eyeTxt = document.getElementById('eyeTxt');
 
     function resizeCanvas() {
       canvas.width = container.clientWidth || window.innerWidth;
-      canvas.height = container.clientHeight || (window.innerHeight - 54);
+      canvas.height = container.clientHeight || (window.innerHeight - 100);
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -194,22 +231,26 @@
     let levelUpTimer = 0;
     let flashScreenTimer = 0;
 
+    // Sistema de carga del Ojo (Bomba)
     let eyeKills = 0;
-    const KILLS_NEEDED = 8;
+    const KILLS_NEEDED = 7;
 
     function updateEyeUI() {
       const pct = Math.min(100, Math.floor((eyeKills / KILLS_NEEDED) * 100));
       if (eyeKills >= KILLS_NEEDED) {
         eyeBtn.classList.add('ready');
         eyeIcon.textContent = "🔥";
-        eyeText.textContent = "¡PODER!";
+        eyeTxt.textContent = "PODER";
       } else {
         eyeBtn.classList.remove('ready');
         eyeIcon.textContent = "👁️";
-        eyeText.textContent = pct + "%";
+        eyeTxt.textContent = pct + "%";
       }
+      hudScore.textContent = score.toString().padStart(4, '0');
+      hudLevel.textContent = level;
     }
 
+    // León-O
     const player = {
       x: 160,
       y: 0,
@@ -218,43 +259,84 @@
       targetX: 160,
 
       draw() {
-        ctx.fillStyle = '#ff5500';
+        ctx.fillStyle = '#ff5500'; // Melena
         ctx.fillRect(this.x + 4, this.y, 30, 14);
 
-        ctx.fillStyle = '#ffcc99';
+        ctx.fillStyle = '#ffcc99'; // Rostro
         ctx.fillRect(this.x + 8, this.y + 10, 22, 12);
 
-        ctx.fillStyle = '#0055d4';
+        ctx.fillStyle = '#0055d4'; // Traje azul
         ctx.fillRect(this.x + 6, this.y + 22, 26, 14);
 
-        ctx.fillStyle = '#d32228';
+        ctx.fillStyle = '#d32228'; // Cinturón
         ctx.fillRect(this.x + 15, this.y + 28, 8, 8);
 
-        ctx.fillStyle = '#ffcc99';
+        ctx.fillStyle = '#ffcc99'; // Botas
         ctx.fillRect(this.x + 8, this.y + 36, 8, 8);
         ctx.fillRect(this.x + 22, this.y + 36, 8, 8);
+
+        // Espada del Augurio en la mano
+        ctx.fillStyle = '#cccccc';
+        ctx.fillRect(this.x + 18, this.y - 10, 3, 12);
+        ctx.fillStyle = '#ffcc00';
+        ctx.fillRect(this.x + 16, this.y + 2, 7, 3);
       },
 
       update() {
         this.x = Math.max(10, Math.min(canvas.width - this.w - 10, this.targetX - (this.w / 2)));
-        this.y = canvas.height - 60;
+        this.y = canvas.height - 58;
       },
 
       reset() {
         this.targetX = canvas.width / 2;
-        this.y = canvas.height - 60;
+        this.y = canvas.height - 58;
         this.update();
       }
     };
 
-    let beams = [];
-    const SHOOT_INTERVAL = 9;
+    // 1 SOLO RAYO TIPO TRUENO / RELÁMPAGO (Cadencia más lenta)
+    let lightningBeams = [];
+    const SHOOT_INTERVAL = 26; // Cadencia pausada
 
-    function autoShoot() {
-      beams.push({ x: player.x + 8,  y: player.y - 8, w: 5, h: 22, speed: 10 });
-      beams.push({ x: player.x + 25, y: player.y - 8, w: 5, h: 22, speed: 10 });
+    function shootLightning() {
+      lightningBeams.push({
+        x: player.x + 18,
+        y: player.y - 12,
+        speed: 7, // Velocidad pausada
+        length: 32,
+        seed: Math.random() * 100
+      });
     }
 
+    function drawLightningBolt(b) {
+      ctx.save();
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = '#00ffff'; // Aura celeste de trueno
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 8;
+
+      ctx.beginPath();
+      let startX = b.x;
+      let startY = b.y;
+      ctx.moveTo(startX, startY);
+
+      // Forma en zigzag tipo trueno
+      let segs = 4;
+      let segH = b.length / segs;
+      for (let s = 1; s <= segs; s++) {
+        let offsetX = (s % 2 === 0 ? 5 : -5);
+        ctx.lineTo(startX + offsetX, startY + (s * segH));
+      }
+      ctx.stroke();
+
+      // Núcleo blanco del relámpago
+      ctx.lineWidth = 1.8;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Enemigos
     const MUTANT_TYPES = [
       { color: '#2f822d', hp: 1, w: 32, h: 22 },
       { color: '#b0651e', hp: 1, w: 34, h: 24 },
@@ -274,7 +356,7 @@
           y: -46,
           w: 50,
           h: 40,
-          speed: 1.0 + (level * 0.15)
+          speed: 0.9 + (level * 0.12)
         });
       } else {
         const t = MUTANT_TYPES[Math.floor(Math.random() * MUTANT_TYPES.length)];
@@ -287,11 +369,12 @@
           y: -30,
           w: t.w,
           h: t.h,
-          speed: (0.8 + Math.random() * 0.5) + (level * 0.18)
+          speed: (0.7 + Math.random() * 0.4) + (level * 0.15)
         });
       }
     }
 
+    // Bomba Ojo de Thundera
     function triggerEyeBomb() {
       if (eyeKills < KILLS_NEEDED) return;
       eyeKills = 0;
@@ -320,7 +403,7 @@
         score = 0;
         level = 1;
         eyeKills = 0;
-        beams = [];
+        lightningBeams = [];
         enemies = [];
         player.reset();
         updateEyeUI();
@@ -352,25 +435,27 @@
         ctx.fillStyle = (flashScreenTimer % 2 === 0) ? '#ffcc00' : '#e52521';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       } else {
-        ctx.fillStyle = '#0a0312';
+        ctx.fillStyle = '#090212';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+        // Estrellas
         ctx.fillStyle = '#fff';
         ctx.fillRect(45, 30, 2, 2);
         ctx.fillRect(210, 80, 2, 2);
-        ctx.fillRect(130, 150, 2, 2);
-        ctx.fillRect(280, 240, 2, 2);
-        ctx.fillRect(90, 310, 2, 2);
+        ctx.fillRect(130, 160, 2, 2);
+        ctx.fillRect(280, 260, 2, 2);
+        ctx.fillRect(80, 320, 2, 2);
       }
 
       if (gameState === 'PLAY') {
         frames++;
 
+        // Cadencia más lenta de disparo
         if (frames % SHOOT_INTERVAL === 0) {
-          autoShoot();
+          shootLightning();
         }
 
-        const spawnRate = Math.max(36, 70 - (level * 6));
+        const spawnRate = Math.max(38, 75 - (level * 5));
         if (frames % spawnRate === 0) spawnEnemy();
 
         const currentLevel = Math.floor(score / 3000) + 1;
@@ -382,21 +467,19 @@
         player.update();
         player.draw();
 
-        for (let i = 0; i < beams.length; i++) {
-          let b = beams[i];
+        // Actualizar y dibujar rayos trueno
+        for (let i = 0; i < lightningBeams.length; i++) {
+          let b = lightningBeams[i];
           b.y -= b.speed;
+          drawLightningBolt(b);
 
-          ctx.fillStyle = '#ffcc00';
-          ctx.fillRect(b.x - 1, b.y, b.w + 2, b.h);
-          ctx.fillStyle = '#e52521';
-          ctx.fillRect(b.x, b.y + 2, b.w, b.h - 4);
-
-          if (b.y < -30) {
-            beams.splice(i, 1);
+          if (b.y < -40) {
+            lightningBeams.splice(i, 1);
             i--;
           }
         }
 
+        // Actualizar y dibujar enemigos
         for (let i = 0; i < enemies.length; i++) {
           let en = enemies[i];
           en.y += en.speed;
@@ -421,16 +504,17 @@
             ctx.fillRect(en.x + en.w - 12, en.y + 10, 4, 4);
           }
 
-          for (let j = 0; j < beams.length; j++) {
-            let b = beams[j];
+          // Impacto de rayo
+          for (let j = 0; j < lightningBeams.length; j++) {
+            let b = lightningBeams[j];
             if (
-              b.x < en.x + en.w &&
-              b.x + b.w > en.x &&
+              b.x > en.x - 8 &&
+              b.x < en.x + en.w + 8 &&
               b.y < en.y + en.h &&
-              b.y + b.h > en.y
+              b.y + b.length > en.y
             ) {
               en.hp--;
-              beams.splice(j, 1);
+              lightningBeams.splice(j, 1);
 
               if (en.hp <= 0) {
                 score += (en.type === 'MUMMRA' ? 500 : 100);
@@ -439,13 +523,14 @@
 
                 if (eyeKills < KILLS_NEEDED) {
                   eyeKills++;
-                  updateEyeUI();
                 }
+                updateEyeUI();
               }
               break;
             }
           }
 
+          // Colisión con jugador o tocan fondo
           if (
             en &&
             en.x < player.x + player.w &&
@@ -462,11 +547,6 @@
             if (score > highScore) highScore = score;
           }
         }
-
-        ctx.fillStyle = '#ffcc00';
-        ctx.font = '10px "Press Start 2P"';
-        ctx.fillText("SCORE " + score, 14, 22);
-        ctx.fillText("NIVEL " + level, canvas.width - 94, 22);
 
         if (levelUpTimer > 0) {
           levelUpTimer--;
@@ -491,7 +571,7 @@
         ctx.fillStyle = '#fff';
         ctx.font = '7.5px "Press Start 2P"';
         ctx.fillText("ARRASTRA TU DEDO PARA MOVER", canvas.width / 2, canvas.height / 2 - 14);
-        ctx.fillText("DISPARO AUTOMÁTICO CONTINUO", canvas.width / 2, canvas.height / 2 + 6);
+        ctx.fillText("DISPARO DE TRUENO CONTINUO", canvas.width / 2, canvas.height / 2 + 6);
         ctx.fillStyle = '#00ffcc';
         ctx.fillText("TOCA LA PANTALLA PARA JUGAR", canvas.width / 2, canvas.height / 2 + 30);
         ctx.textAlign = 'left';
