@@ -1,1 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Thunder-Arcade - Defensor del Tercer Planeta</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    body {
+      background-color: #040207;
+      color: #fff;
+      font-family: 'Press Start 2P', monospace, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Pantalla superior del arcade */
+    #canvas-container {
+      width: 100%;
+      flex: 1;
+      background: #0d0614;
+      position: relative;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Panel inferior: Comercial y Controles */
+    #bottom-panel {
+      height: 38vh;
+      background: #14070a;
+      border-top: 3px solid #e52521;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px 14px 14px;
+      box-shadow: 0 -8px 25px rgba(229, 37, 33, 0.3);
+    }
+
+    /* Franja comercial */
+    .promo-bar {
+      background: linear-gradient(90deg, #2b0c10 0%, #170407 100%);
+      border: 1.5px solid #ffcc00;
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .promo-text {
+      font-size: 8px;
+      line-height: 1.4;
+      color: #ffd8d8;
+    }
+
+    .promo-text strong {
+      color: #ffcc00;
+      font-size: 9px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .btn-wa {
+      background: #25d366;
+      color: #fff;
+      text-decoration: none;
+      font-size: 9px;
+      font-weight: bold;
+      padding: 9px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      border: 1px solid #1caa4f;
+      box-shadow: 0 3px 0 #12632f;
+    }
+
+    .btn-wa:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    /* Zona de Mandos Táctiles */
+    .controls-zone {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1;
+      padding-top: 8px;
+    }
+
+    .dpad-container {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-ctrl {
+      width: 72px;
+      height: 72px;
+      background: #241418;
+      border: 2px solid #6b222a;
+      border-radius: 14px;
+      color: #ffcc00;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 0 #14070a;
+    }
+
+    .btn-ctrl:active, .btn-ctrl.active {
+      background: #ffcc00;
+      color: #000;
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #997a00;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Botón Espada / Rayo */
+    .btn-sword {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(180deg, #00d2ff 0%, #0066cc 100%);
+      border: 3px solid #ffffff;
+      border-radius: 50%;
+      color: #fff;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      box-shadow: 0 6px 0 #003366, 0 0 15px rgba(0, 210, 255, 0.4);
+    }
+
+    .btn-sword:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #003366;
+      background: #5ce1e6;
+    }
+
+    /* Botón Emblema Ojo Especial */
+    .btn-special {
+      width: 65px;
+      height: 65px;
+      background: radial-gradient(circle, #e52521 40%, #8e0e11 100%);
+      border: 3px solid #ffcc00;
+      border-radius: 50%;
+      color: #ffcc00;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 5px 0 #4a0507, 0 0 12px rgba(229, 37, 33, 0.6);
+    }
+
+    .btn-special:active {
+      transform: translateY(3px);
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pantalla de Juego en Canvas -->
+  <div id="canvas-container">
+    <canvas id="gameCanvas"></canvas>
+  </div>
+
+  <!-- Panel Inferior: Comercial + Controles Arcade -->
+  <div id="bottom-panel">
+    
+    <!-- Barra comercial -->
+    <div class="promo-bar">
+      <div class="promo-text">
+        <strong>THUNDER-PROMO ⚔️</strong>
+        BENEFICIO EXCLUSIVO CON TU CARTUCHO
+      </div>
+      <a href="https://wa.me/56991081769?text=Hola!%20Tengo%20el%20cartucho%20gamer%20Thunder,%20%C2%BFcu%C3%A1l%20es%20la%20promoci%C3%B3n%20de%20hoy?" class="btn-wa">
+        WHATSAPP
+      </a>
+    </div>
+
+    <!-- Controles táctiles -->
+    <div class="controls-zone">
+      <div class="dpad-container">
+        <button class="btn-ctrl" id="btnLeft">◀</button>
+        <button class="btn-ctrl" id="btnRight">▶</button>
+      </div>
+
+      <div class="action-group">
+        <button class="btn-special" id="btnEye">OJO<br>100%</button>
+        <button class="btn-sword" id="btnSword">⚔️<br>RAYO</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    let frames = 0;
+    let score = 0;
+    let highScore = 0;
+    let gameState = 'START';
+    let energy = 100;
+    let flashScreen = 0;
+
+    // Héroe felino
+    const hero = {
+      x: 0,
+      y: 0,
+      w: 42,
+      h: 52,
+      speed: 6,
+      movingLeft: false,
+      movingRight: false,
+      isAttacking: false,
+      attackCooldown: 0,
+
+      reset() {
+        this.x = canvas.width / 2 - this.w / 2;
+        this.y = canvas.height - 70;
+      },
+
+      update() {
+        if (this.movingLeft) this.x -= this.speed;
+        if (this.movingRight) this.x += this.speed;
+
+        if (this.x < 10) this.x = 10;
+        if (this.x > canvas.width - this.w - 10) this.x = canvas.width - this.w - 10;
+
+        if (this.attackCooldown > 0) this.attackCooldown--;
+
+        if (this.isAttacking && this.attackCooldown === 0) {
+          this.shootBeam();
+          this.attackCooldown = 12;
+        }
+      },
+
+      shootBeam() {
+        beams.push({
+          x: this.x + this.w / 2 - 3,
+          y: this.y - 12,
+          w: 6,
+          h: 24,
+          speed: 11
+        });
+      },
+
+      draw() {
+        ctx.save();
+
+        ctx.shadowColor = '#00e5ff';
+        ctx.shadowBlur = 10;
+
+        // Melena roja leonina
+        ctx.fillStyle = '#d32228';
+        ctx.beginPath();
+        ctx.arc(this.x + 21, this.y + 16, 17, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cara / Tez dorada
+        ctx.fillStyle = '#ffcca3';
+        ctx.beginPath();
+        ctx.arc(this.x + 21, this.y + 17, 10, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Torso atlético azul
+        ctx.fillStyle = '#0055b3';
+        ctx.fillRect(this.x + 12, this.y + 26, 18, 16);
+
+        // Cinturón con el emblema felino
+        ctx.fillStyle = '#111';
+        ctx.fillRect(this.x + 10, this.y + 38, 22, 6);
+        ctx.fillStyle = '#d32228';
+        ctx.beginPath();
+        ctx.arc(this.x + 21, this.y + 41, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Piernas / Botas
+        ctx.fillStyle = '#ffcca3';
+        ctx.fillRect(this.x + 13, this.y + 42, 6, 8);
+        ctx.fillRect(this.x + 23, this.y + 42, 6, 8);
+        ctx.fillStyle = '#0055b3';
+        ctx.fillRect(this.x + 12, this.y + 48, 7, 5);
+        ctx.fillRect(this.x + 23, this.y + 48, 7, 5);
+
+        // Guantelete dorado y Espada
+        ctx.fillStyle = '#ffcc00';
+        ctx.fillRect(this.x + 28, this.y + 22, 8, 8);
+
+        // Hoja de la Espada plateada
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(this.x + 31, this.y - 10, 4, 32);
+        // Ojo de la espada (rubí)
+        ctx.fillStyle = '#e52521';
+        ctx.beginPath();
+        ctx.arc(this.x + 33, this.y + 20, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+    };
+
+    let beams = [];
+    let particles = [];
+
+    function addSparks(x, y, color) {
+      for (let i = 0; i < 16; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          life: 22,
+          color: color
+        });
+      }
+    }
+
+    let enemies = [];
+    let spawnTimer = 0;
+
+    function spawnEnemy() {
+      const types = ['mutant', 'shadow'];
+      const type = types[Math.floor(Math.random() * types.length)];
+      enemies.push({
+        type: type,
+        x: Math.random() * (canvas.width - 44) + 12,
+        y: -35,
+        w: 32,
+        h: 30,
+        vy: type === 'mutant' ? 2.2 : 3.0,
+        color: type === 'mutant' ? '#2ed573' : '#a55eea',
+        phase: Math.random() * Math.PI
+      });
+    }
+
+    function triggerEyeOfThundera() {
+      if (energy >= 100 && gameState === 'PLAY') {
+        flashScreen = 15;
+        for (let e of enemies) {
+          addSparks(e.x + e.w / 2, e.y + e.h / 2, '#ffcc00');
+          score += 150;
+        }
+        enemies = [];
+        energy = 0;
+      }
+    }
+
+    function triggerAction() {
+      if (gameState === 'START') {
+        gameState = 'PLAY';
+        score = 0;
+        energy = 100;
+        enemies = [];
+        beams = [];
+        particles = [];
+        hero.reset();
+      } else if (gameState === 'GAMEOVER') {
+        gameState = 'START';
+      }
+    }
+
+    const btnLeft = document.getElementById('btnLeft');
+    const btnRight = document.getElementById('btnRight');
+    const btnSword = document.getElementById('btnSword');
+    const btnEye = document.getElementById('btnEye');
+
+    btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); hero.movingLeft = true; triggerAction(); }, {passive:false});
+    btnLeft.addEventListener('touchend', () => { hero.movingLeft = false; });
+
+    btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); hero.movingRight = true; triggerAction(); }, {passive:false});
+    btnRight.addEventListener('touchend', () => { hero.movingRight = false; });
+
+    btnSword.addEventListener('touchstart', (e) => { e.preventDefault(); hero.isAttacking = true; triggerAction(); }, {passive:false});
+    btnSword.addEventListener('touchend', () => { hero.isAttacking = false; });
+
+    btnEye.addEventListener('touchstart', (e) => { e.preventDefault(); triggerEyeOfThundera(); }, {passive:false});
+
+    // Control táctil arrastrando directo sobre el canvas
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      triggerAction();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      hero.x = (touch.clientX - rect.left) - hero.w / 2;
+      hero.isAttacking = true;
+    }, {passive:false});
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      hero.x = (touch.clientX - rect.left) - hero.w / 2;
+    }, {passive:false});
+
+    canvas.addEventListener('touchend', () => {
+      hero.isAttacking = false;
+    });
+
+    function loop() {
+      // 1. Cielo crepuscular cósmico
+      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      grad.addColorStop(0, '#1b0b2e');
+      grad.addColorStop(0.6, '#40122e');
+      grad.addColorStop(1, '#0e0514');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Luna gigante de fondo
+      ctx.fillStyle = 'rgba(255, 230, 200, 0.15)';
+      ctx.beginPath();
+      ctx.arc(canvas.width - 50, 80, 45, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Proyección especial del emblema
+      if (flashScreen > 0) {
+        ctx.fillStyle = `rgba(229, 37, 33, ${flashScreen / 15})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = '#ffcc00';
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 3, 50, 0, Math.PI * 2);
+        ctx.stroke();
+
+        flashScreen--;
+      }
+
+      if (gameState === 'PLAY') {
+        frames++;
+
+        if (energy < 100 && frames % 5 === 0) energy++;
+
+        spawnTimer++;
+        if (spawnTimer > 42) {
+          spawnEnemy();
+          spawnTimer = 0;
+        }
+
+        hero.update();
+        hero.draw();
+
+        // Rayos de la Espada
+        for (let i = 0; i < beams.length; i++) {
+          let b = beams[i];
+          b.y -= b.speed;
+
+          ctx.save();
+          ctx.shadowColor = '#00d2ff';
+          ctx.shadowBlur = 12;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(b.x, b.y, b.w, b.h);
+          ctx.fillStyle = '#00d2ff';
+          ctx.fillRect(b.x - 2, b.y + 4, b.w + 4, b.h - 8);
+          ctx.restore();
+
+          if (b.y < -30) {
+            beams.splice(i, 1);
+            i--;
+          }
+        }
+
+        // Enemigos mutantes
+        for (let i = 0; i < enemies.length; i++) {
+          let e = enemies[i];
+          e.y += e.vy;
+          e.x += Math.sin(frames * 0.08 + e.phase) * 2.2;
+
+          ctx.fillStyle = e.color;
+          ctx.beginPath();
+          ctx.moveTo(e.x + e.w / 2, e.y + e.h);
+          ctx.lineTo(e.x, e.y + 6);
+          ctx.lineTo(e.x + 8, e.y);
+          ctx.lineTo(e.x + e.w / 2, e.y + 12);
+          ctx.lineTo(e.x + e.w - 8, e.y);
+          ctx.lineTo(e.x + e.w, e.y + 6);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.fillStyle = '#ffcc00';
+          ctx.fillRect(e.x + 9, e.y + 8, 3, 3);
+          ctx.fillRect(e.x + e.w - 12, e.y + 8, 3, 3);
+
+          // Impacto Rayo - Enemigo
+          for (let j = 0; j < beams.length; j++) {
+            let b = beams[j];
+            if (
+              b.x > e.x && b.x < e.x + e.w &&
+              b.y > e.y && b.y < e.y + e.h
+            ) {
+              addSparks(e.x + e.w / 2, e.y + e.h / 2, '#00d2ff');
+              enemies.splice(i, 1);
+              beams.splice(j, 1);
+              i--;
+              score += 100;
+              break;
+            }
+          }
+
+          // Colisión Enemigo - Héroe
+          if (
+            e.x + e.w > hero.x &&
+            e.x < hero.x + hero.w &&
+            e.y + e.h > hero.y &&
+            e.y < hero.y + hero.h
+          ) {
+            addSparks(hero.x + hero.w / 2, hero.y + hero.h / 2, '#d32228');
+            gameState = 'GAMEOVER';
+            if (score > highScore) highScore = score;
+          }
+
+          if (e.y > canvas.height + 20) {
+            enemies.splice(i, 1);
+            i--;
+          }
+        }
+
+        // Partículas
+        for (let i = 0; i < particles.length; i++) {
+          let p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life--;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, 3, 3);
+          if (p.life <= 0) {
+            particles.splice(i, 1);
+            i--;
+          }
+        }
+
+        // Marcador Score y Barra de Especial
+        ctx.fillStyle = '#ffcc00';
+        ctx.font = '11px "Press Start 2P"';
+        ctx.fillText("SCORE " + score, 14, 24);
+
+        ctx.fillStyle = '#333';
+        ctx.fillRect(14, 34, 100, 7);
+        ctx.fillStyle = energy >= 100 ? '#e52521' : '#00d2ff';
+        ctx.fillRect(14, 34, energy, 7);
+
+      } else if (gameState === 'START') {
+        hero.reset();
+        hero.draw();
+
+        ctx.fillStyle = '#ffcc00';
+        ctx.font = '14px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.fillText("THUNDER-ARCADE", canvas.width / 2, canvas.height / 2 - 35);
+
+        ctx.fillStyle = '#e52521';
+        ctx.font = '8px "Press Start 2P"';
+        ctx.fillText("ESPADA DEL AUGURIO", canvas.width / 2, canvas.height / 2 - 15);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '8px "Press Start 2P"';
+        ctx.fillText("TOCA PARA EMPEZAR", canvas.width / 2, canvas.height / 2 + 15);
+        ctx.textAlign = 'left';
+
+      } else if (gameState === 'GAMEOVER') {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(canvas.width / 2 - 120, canvas.height / 2 - 50, 240, 95);
+        ctx.strokeStyle = '#e52521';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(canvas.width / 2 - 120, canvas.height / 2 - 50, 240, 95);
+
+        ctx.fillStyle = '#e52521';
+        ctx.font = '12px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 20);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '8px "Press Start 2P"';
+        ctx.fillText("PUNTOS: " + score, canvas.width / 2, canvas.height / 2 + 5);
+        ctx.fillText("RECORD: " + highScore, canvas.width / 2, canvas.height / 2 + 22);
+        ctx.textAlign = 'left';
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    loop();
+  </script>
+</body>
+</html>
