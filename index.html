@@ -26,17 +26,19 @@
       position: relative;
     }
 
-    /* Caluga Superior (Testigo Verde Neón) */
+    /* ============================================================
+       1. CALUGA SUPERIOR COMERCIAL
+       ============================================================ */
     #promo-card-top {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 68px;
-      background: #14051e;
-      border: 4px solid #00ff66;
+      background: #10061e;
+      border: 4px solid #00e5ff;
       outline: 2px solid #000;
-      box-shadow: inset 0 0 0 2px #66ffaa, 0 4px 15px rgba(0, 255, 102, 0.4);
+      box-shadow: inset 0 0 0 2px #80f2ff, 0 4px 15px rgba(0, 229, 255, 0.45);
       padding: 6px 10px;
       display: flex;
       align-items: center;
@@ -48,8 +50,8 @@
     .promo-thumb {
       width: 44px;
       height: 44px;
-      background: #250933;
-      border: 2px solid #00ff66;
+      background: #1c0836;
+      border: 2px solid #00e5ff;
       border-radius: 4px;
       display: flex;
       align-items: center;
@@ -68,7 +70,7 @@
 
     .promo-tag {
       font-size: 7px;
-      color: #00ff66;
+      color: #00e5ff;
       letter-spacing: 0.5px;
       line-height: 1.2;
     }
@@ -104,7 +106,9 @@
       box-shadow: 0 1px 0 #12632f;
     }
 
-    /* HUD Arcade */
+    /* ============================================================
+       2. BARRA HUD ARCADE
+       ============================================================ */
     #arcade-hud {
       position: fixed;
       top: 68px;
@@ -178,7 +182,9 @@
     .eye-txt { font-size: 6.5px; color: #aaa; }
     #eye-btn-top.ready .eye-txt { color: #ffcc00; font-weight: bold; }
 
-    /* Contenedor Canvas */
+    /* ============================================================
+       3. PANTALLA DEL JUEGO
+       ============================================================ */
     #game-container {
       position: absolute;
       top: 112px;
@@ -199,7 +205,7 @@
 </head>
 <body>
 
-  <!-- Caluga Promocional con Marco Verde Neón -->
+  <!-- Caluga Superior -->
   <header id="promo-card-top">
     <div class="promo-thumb">🍔</div>
     <div class="promo-details">
@@ -211,7 +217,7 @@
     </a>
   </header>
 
-  <!-- HUD: Puntos, Vidas, Nivel y Botón Bomba -->
+  <!-- HUD: Puntos, Vidas, Nivel y Bomba Ojo -->
   <div id="arcade-hud">
     <div class="hud-group">
       <div class="hud-box">
@@ -250,6 +256,10 @@
     const eyeBtn = document.getElementById('eye-btn-top');
     const eyeIcon = document.getElementById('eyeIcon');
     const eyeTxt = document.getElementById('eyeTxt');
+
+    // Carga de la imagen con el nombre exacto indicado
+    const logoImg = new Image();
+    logoImg.src = "logothunder.png";
 
     function resizeCanvas() {
       canvas.width = container.clientWidth || window.innerWidth;
@@ -488,6 +498,7 @@
         ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+        // Estrellas
         ctx.fillStyle = '#fff';
         ctx.fillRect(45, 30, 2, 2);
         ctx.fillRect(210, 80, 2, 2);
@@ -619,17 +630,23 @@
         }
 
       } else if (gameState === 'START') {
-        ctx.fillStyle = '#ffcc00';
-        ctx.font = '12px "Press Start 2P"';
-        ctx.textAlign = 'center';
-        ctx.fillText("THUNDERCATS", canvas.width / 2, canvas.height / 2 - 40);
+        // Muestra el logotipo únicamente aquí en la pantalla previa
+        if (logoImg.complete && logoImg.naturalWidth > 0) {
+          const aspect = logoImg.naturalWidth / logoImg.naturalHeight;
+          let drawW = Math.min(canvas.width - 24, 340);
+          let drawH = drawW / aspect;
+          let drawX = (canvas.width - drawW) / 2;
+          let drawY = (canvas.height / 2) - drawH - 10;
+          ctx.drawImage(logoImg, drawX, drawY, drawW, drawH);
+        }
 
-        ctx.fillStyle = '#00ff66';
+        ctx.fillStyle = '#00e5ff';
         ctx.font = '8.5px "Press Start 2P"';
-        ctx.fillText("TOCA LA PANTALLA", canvas.width / 2, canvas.height / 2 + 10);
-        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText("TOCA LA PANTALLA", canvas.width / 2, (canvas.height / 2) + 36);
+        ctx.fillStyle = '#ffcc00';
         ctx.font = '7px "Press Start 2P"';
-        ctx.fillText("INICIAS CON 2 VIDAS", canvas.width / 2, canvas.height / 2 + 30);
+        ctx.fillText("INICIAS CON 2 VIDAS", canvas.width / 2, (canvas.height / 2) + 56);
         ctx.textAlign = 'left';
 
       } else if (gameState === 'GAMEOVER') {
